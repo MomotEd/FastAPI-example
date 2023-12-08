@@ -9,6 +9,7 @@ services:
       - 5432
     env_file:
       - .env-non-dev
+
   app:
     build: 
       context: .
@@ -23,3 +24,4 @@ services:
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8080
     volumes:
       - ./app:/app/
+
