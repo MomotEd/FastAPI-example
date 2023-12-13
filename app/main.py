@@ -1,13 +1,39 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from passlib.context import CryptContext
+from db import get_session
+from sqlmodel.ext.asyncio.session import AsyncSession
+import models
 
-from api.routes.api import router as api_router
-from core.config import API_PREFIX, DEBUG, PROJECT_NAME, VERSION
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+app = FastAPI()
 
 
-def get_application() -> FastAPI:
-    application = FastAPI(title=PROJECT_NAME, debug=DEBUG, version=VERSION)
-    application.include_router(api_router, prefix=API_PREFIX)
-    return application
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
 
-app = get_application()
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello from Docker"}
+
+
+@app.post("/register")
+async def register_user(
+    user: models.UserCreate, session: AsyncSession = Depends(get_session)
+) -> models.User:
+    password_hashed = get_password_hash(user.password)
+    user_stored = models.UserStored(
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email,
+        password_hashed=password_hashed,
+    )
+    session.add(user_stored)
+    await session.commit()
+    await session.refresh(user_stored)
+    return user

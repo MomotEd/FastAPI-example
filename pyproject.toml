@@ -2,7 +2,7 @@
 name = "InternHub"
 version = "0.1.0"
 description = "InternHub"
-authors = ["Eduard Momot (flancern@gmail.com)"]
+authors = ["Eduard Momot <flancern@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -13,6 +13,12 @@ requests = "^2.22.0"
 loguru = "^0.7.0"
 joblib = "^1.2.0"
 scikit-learn = "^1.2.0"
+sqlmodel = "^0.0.14"
+alembic = "^1.13.0"
+asyncpg = "^0.29.0"
+email-validator = "^2.1.0"
+passlib = "^1.7.4"
+bcrypt = "^4.1.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2"
