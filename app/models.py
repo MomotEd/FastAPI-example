@@ -11,11 +11,8 @@ class User(SQLModel):
 
     @field_validator("email")
     @classmethod
-    def is_email_valid(cls, value: str) -> str:
-        try:
-            validate_email(value)
-        except EmailNotValidError:
-            raise ValueError("Invalid email format")
+    def validate_email(cls, value: str) -> str:
+        validate_email(value)
         return value
 
 
