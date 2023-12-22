@@ -1,4 +1,4 @@
-FROM python:3.12.0
+FROM python:3.11.0
 
 ENV PYTHONUNBUFFERED 1
 
@@ -16,6 +16,15 @@ COPY ./app/ ./
 COPY ./ml/model/ ./ml/model/
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
+
+
+RUN mkdir /FastAPI-example
+
+WORKDIR /FastAPI-example
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
 
 EXPOSE 8080
 CMD uvicorn main:app --host 0.0.0.0 --port 8080
